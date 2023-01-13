@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <title>WebChat</title>
+    </head>
+    <body>
+        <nav>
+            <div>
+                {% if request.user.is_authenticated %}
+                    <a href="/rooms/">Salons</a>
+                    <a href="/logout/">Déconnexion</a>
+                {% else %}
+                <a href="/login/">Se connecter</a>
+                <a href="/signup/">S'inscrire</a>
+                {% endif %}
+            </div>
+        </nav>
+    </body>
+</html>
