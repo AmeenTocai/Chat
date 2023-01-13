@@ -91,20 +91,24 @@
     </head>
     <body>
         {% if request.user.is_authenticated %}
-            <nav>
-                <div>
-                    <a href="/rooms/">Salons</a>
+            <section class="container forms">
+                <div class="form signup">
+                    <div class="form-content">
+                        <header>Bienvenue</header>
+                        <div class="field button-field">
+                            <a href="/login/"><button>Connexion</button></a>
+                        </div>
+                        <div class="field button-field">
+                            <a href="/signup/"><button>Inscription</button></a>
+                        </div>
+                    </div>
                 </div>
-            </nav>
-            <nav>
-                <div>
-                    <a href="/logout/">Déconnexion</a>
-                </div>
-            </nav>
+            </section>
         {% else %}
             <section class="container forms">
                 <div class="form signup">
                     <div class="form-content">
+                        <p style="align-items:center;">{% load static %} <img src="{% static "core/image.png" %}" alt="logo" height="191px" /></p>
                         <header>Bienvenue</header>
                         <div class="field button-field">
                             <a href="/login/"><button>Connexion</button></a>
