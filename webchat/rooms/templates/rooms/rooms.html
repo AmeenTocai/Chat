@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <title>Salons</title>
+    </head>
+    <body>
+        <nav>
+            <div>
+                <a href="/logout/">Déconnexion</a>
+            </div>
+        </nav>
+        <div>
+            {% for room in rooms %}
+                <div>
+                    <h2>{{room.name}}</h2>
+                    <a href="{% url 'room' room.slug %}">Rejoindre le salon</a>
+                </div>
+            {% endfor %}
+        </div>
+    </body>
+</html>
