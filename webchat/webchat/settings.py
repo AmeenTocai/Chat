@@ -70,6 +70,14 @@ TEMPLATES = [
     },
 ]
 
+WSGI_APPLICATION = 'webchat.wsgi.application'
+ASGI_APPLICATION = 'webchat.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer'
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -128,12 +136,3 @@ LOGIN_REDIRECT_URL = '/rooms/'
 LOGIN_URL = '/login/'
 
 
-WSGI_APPLICATION = 'webchat.wsgi.application'
-ASGI_APPLICATION = 'webchat.asgi.application'
-
-
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer'
-    }
-}

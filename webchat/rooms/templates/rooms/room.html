@@ -5,26 +5,96 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width">
         <title>{{room.name}}</title>
+
+        <style>
+            #msglist {
+                height: 500px;
+                width: auto;
+                word-wrap: break-word;
+                overflow-y: auto;
+            }
+        </style>
+
     </head>
     <body>
         <nav>
             <div>
+                <a href="/rooms/">Salons</a>
                 <a href="/logout/">Déconnexion</a>
             </div>
         </nav>
         <div>
-            <div>
-                <div> <!-- Messages affichés -->
-                    <p>Nom d'utilisateur</p>
-                    <p>Message</p>
-                </div>
+            <h1>{{room.name}}</h1>
+        </div>
+        <div>
+            <div id="msglist"> <!-- Affiche les messages dans le flux de messages (avec nom d'utilisateur) -->
+                {% for message in message %}<b>{{message.user.username}}</b>: {{message.text}}<br>{% endfor %}
             </div>
         </div>
-        <div> 
-            <form> <!-- Zone où l'on rentre son message -->
-                <input type="text" name="typed" id="input" placeholder="Envoyer un message"/>
-                <button id="input-submit">Envoyer</button>
+        <div>
+            <form method="post">
+                <input type="text" name="text" maxlength="2000" placeholder="Envoyer un message" id="chatinput">
+                <button id="chatsubmit">Envoyer</button>
             </form>
-        </div>       
+        </div>
+        
+        {{room.slug|json_script:"roomnamejs"}}
+        {{request.user.username|json_script:"usernamejs"}}
+        
+        <script>
+            const roomName = JSON.parse(document.getElementById('roomnamejs').textContent);
+            const userName = JSON.parse(document.getElementById('usernamejs').textContent);
+            const chatSocket = new WebSocket(
+                'ws://' + window.location.host + '/ws/' + roomName + '/'
+            );
+        
+            chatSocket.onmessage = function(e) {
+                const data = JSON.parse(e.data);
+        
+                //concatène le message à la suite des autres messages affichés
+                if (data.message) { 
+                    document.querySelector('#msglist').innerHTML += ('<b>' + data.username + '</b>: ' + data.message + '<br>');
+                }
+        
+                scrollDown(); //scrolle jusqu'au dernier message
+            };
+
+            chatSocket.onclose = function(e) {
+                console.log('onclose')
+            }
+        
+            document.querySelector('#chatsubmit').onclick = function(e) {
+                e.preventDefault()
+        
+                const chatInput = document.querySelector('#chatinput');
+                const message = chatInput.value;
+        
+                console.log({
+                    'message': message,
+                    'username': userName,
+                    'room': roomName
+                })
+        
+                chatSocket.send(JSON.stringify({
+                    'message': message,
+                    'username': userName,
+                    'room': roomName
+                }));
+        
+                chatInput.value = '';
+        
+                return false
+            };
+                 
+            //Permet de scroller jusqu'au dernier message affiché, 
+            //pour que les messages les plus récents soient toujours visibles
+            function scrollDown() {
+                let list = document.getElementById("msglist");
+                list.scrollTop = list.scrollHeight;
+            }
+        
+            //Scroll au chargement de la page
+            scrollDown();
+        </script>
     </body>
 </html>

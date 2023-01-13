@@ -8,7 +8,7 @@ https://docs.djangoproject.com/en/4.1/howto/deployment/asgi/
 """
 
 import os
-import rooms.path
+import rooms.routing
 
 from django.core.asgi import get_asgi_application
 from channels.auth import AuthMiddlewareStack
@@ -21,7 +21,7 @@ application = ProtocolTypeRouter({
     "http": get_asgi_application(),
     "websocket": AuthMiddlewareStack(
         URLRouter(
-            rooms.path.websocket_urlpatterns
+            rooms.routing.websocket_urlpatterns
         )
     )
 })

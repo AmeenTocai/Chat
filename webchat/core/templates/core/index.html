@@ -1,144 +1,23 @@
 <!DOCTYPE html>
+
 <html lang="fr">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width">
         <title>WebChat</title>
-        <style>
-            *{
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-                font-family: Arial, Helvetica, sans-serif;
-            }
-            @keyframes pan {
-                100% { background-position: 15% 50%;}
-            }
-            body{
-                display: grid;
-                place-items: center;
-                margin: 0;
-                padding: 0 24px;
-                background-image: url({% load static %}{% static "core/imageb.jpeg" %});
-                background-repeat: no-repeat;
-                background-size: cover;
-                animation: pan 6s infinite alternate linear;
-            }
-            .container{
-                height: 100vh;
-                width: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                /*background-color: #4070f4;*/
-
-                column-gap: 30px;
-            }
-            @media (width >= 500px){
-                body{
-                    padding: 0;
-                }
-            }
-            .form{
-                position: absolute;
-                max-width: 430px;
-                width: 100%;
-                padding: 30px;
-                border-radius: 6px;
-                background: #FFF;
-            }
-            header{
-                font-size: 28px;
-                font-weight: 600;
-                color: #232836;
-                text-align: center;
-            }
-            form{
-                margin-top: 30px;
-            }
-            .form .field{
-                position: relative;
-                height: 50px;
-                width: 100%;
-                margin-top: 20px;
-                border-radius: 6px;
-            }
-            .field input,
-            .field button{
-                height: 100%;
-                width: 100%;
-                border: none;
-                font-size: 16px;
-                font-weight: 400;
-                border-radius: 6px;
-            }
-            .field input{
-                outline: none;
-                padding: 0 15px;
-                border: 1px solid#CACACA;
-            }
-            .field input:focus{
-                border-bottom-width: 2px;
-            }
-            .field button{
-                color: #fff;
-                background-color: #0171d3;
-                transition: all 0.3s ease;
-                cursor: pointer;
-            }
-            .field button:hover{
-                background-color: #016dcb;
-            }
-            .form-link{
-                text-align: center;
-                margin-top: 10px;
-            }
-            .form-link span,
-            .form-link a{
-                font-size: 14px;
-                font-weight: 400;
-                color: #232836;
-            }
-            .form a{
-                color: #ffffff;
-                text-decoration: none;
-            }
-            .form-content a:hover{
-                text-decoration: underline;
-            }
-        </style>
     </head>
     <body>
-        {% if request.user.is_authenticated %}
-            <section class="container forms">
-                <div class="form signup">
-                    <div class="form-content">
-                        <p style="align-items:center;">{% load static %} <img src="{% static "core/image.png" %}" alt="logo" height="191px" /></p>
-                        <header>Bienvenue @user</header>
-                        <div class="field button-field">
-                            <a href="/login/"><button>Connexion</button></a>
-                        </div>
-                        <div class="field button-field">
-                            <a href="/signup/"><button>Inscription</button></a>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        {% else %}
-            <section class="container forms">
-                <div class="form signup">
-                    <div class="form-content">
-                        <p style="align-items:center;">{% load static %} <img src="{% static "core/image.png" %}" alt="logo" height="191px" /></p>
-                        <header>Bienvenue</header>
-                        <div class="field button-field">
-                            <a href="/login/"><button>Connexion</button></a>
-                        </div>
-                        <div class="field button-field">
-                            <a href="/signup/"><button>Inscription</button></a>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        {% endif %}
+        <nav>
+            <div>
+                {% if request.user.is_authenticated %}
+                    <a href="/rooms/">Salons</a>
+                    <a href="/logout/">Déconnexion</a>
+                {% else %}
+                <a href="/login/">Se connecter</a>
+                <a href="/signup/">S'inscrire</a>
+                {% endif %}
+            </div>
+        </nav>
+        
     </body>
 </html>
