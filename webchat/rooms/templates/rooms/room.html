@@ -12,6 +12,13 @@
                 box-sizing: border-box;
                 font-family: Arial, Helvetica, sans-serif;
             }
+            #msglist {
+                height: 100%;
+                width: auto;
+                word-wrap: break-word;
+                overflow-y: auto;
+                
+            }
             @keyframes pan {
                 100% { background-position: 15% 50%;}
             }
@@ -71,16 +78,6 @@
             .field input:focus{
                 border-bottom-width: 2px;
             }
-            .form-link{
-                text-align: center;
-                margin-top: 10px;
-            }
-            .form-link span,
-            .form-link a{
-                font-size: 14px;
-                font-weight: 400;
-                color: #232836;
-            }
             .form a{
                 color: #ffffff;
                 text-decoration: none;
@@ -88,12 +85,47 @@
             .form-content a:hover{
                 text-decoration: underline;
             }
-            .field button{
+            .button-field{
+                display: inline-block;
+            }
+            .b2{
+            padding-left: 492px;
+            }
+            .button-field button{
+                height: 20px;
+                width: 70px;
+                border: none;
+                font-size: 11px;
+                font-weight: 400;
+                border-radius: 6px;
+            }
+            .b1 button{
                 border: none;
                 cursor: pointer;
                 appearance: none;
                 background-color: inherit;
                 vertical-align: middle;
+                color: #fff;
+                background-color: #0171d3;
+                transition: all 0.3s ease;
+                cursor: pointer;
+            }
+            .b1 button:hover{
+                background-color: #016dcb;
+            }
+            .b2 button{
+                border: none;
+                cursor: pointer;
+                appearance: none;
+                background-color: inherit;
+                vertical-align: middle;
+                color: #fff;
+                background-color: rgb(255, 65, 65);
+                transition: all 0.3s ease;
+                cursor: pointer;
+            }
+            .b2 button:hover{
+                background-color: rgb(244, 62, 62);
             }
             .form-content{
                 
@@ -111,38 +143,59 @@
                 border-radius: 6px;
                 margin-bottom: 10px;
             }
-            .header3 a{
-                margin-left: 170px;
-            }
             .textmess{
                 background-color: #cacaca35;
                 border-radius: 6px;
                 padding: 10px;
                 height: 62%;
             }
+            .textbox{
+                background-color: #cacaca7c;
+                border-radius: 6px;
+                padding: 5px;
+                margin: 5px 0;
+            }
             .sendmess{
                 margin-top: 10px;
                 margin-bottom: 0px;
             }
+            .field button{
+                 border: none;
+                 cursor: pointer;
+                 appearance: none;
+                 background-color: inherit;
+                 vertical-align: middle;
+             }
         </style>
     </head>
     <body>
         <section class="container forms">
             <div class="form signup">
                 <div class="form-content">
+                    <div class="header1">
+                        <div class="button-field b1">
+                            <a href="/rooms/"><button>Salons</button></a>
+                        </div>
+                        <div class="button-field b2">
+                            <a href="/logout/"><button>Déconnexion</button></a>
+                        </div>
+                    </div>
                     <div class="header2">
-                        {% load static %} <img src="{% static "core/image.png" %}" alt="logo" height="80px" />
+                        {% load static %} <img src="{% static "core/image.png" %}" alt="logo" height="70px" />
                     </div>
                     <div class="header3">
-                        <p>
-                            <strong style="font-size:30px;">{{room.name}}</strong>
-                            <a href="/rooms/" style="color: black;">Salons</a>
-                            <a href="/logout/" style="color: rgb(255, 65, 65);">Déconnexion</a>
-                        </p>
+                        <div class="menu">
+                            <p><strong style="font-size:30px;">{{room.name}}</strong></p>
+                        </div>
                     </div>
                     <div class="textmess">
                         <div id="msglist"> <!-- Affiche les messages dans le flux de messages (avec nom d'utilisateur) -->
-                            {% for message in message %}<b>{{message.user.username}}</b>: {{message.text}}<br>{% endfor %}
+                            {% for message in message %}
+                                <div class="textbox">
+                                    <h4 style="padding-bottom: 3px;">{{message.user.username}}</h4>
+                                    {{message.text}}
+                                </div>
+                            {% endfor %}
                         </div>
                     </div>
                     <div class="sendmess">
@@ -169,7 +222,7 @@
                     
                             //concatène le message à la suite des autres messages affichés
                             if (data.message) { 
-                                document.querySelector('#msglist').innerHTML += ('<b>' + data.username + '</b>: ' + data.message + '<br>');
+                                document.querySelector('#msglist').innerHTML += ('<div class="textbox"><h4 style="padding-bottom: 3px;">' + data.username + '</h4>' + data.message + '</div>');
                             }
                     
                             scrollDown(); //scrolle jusqu'au dernier message
