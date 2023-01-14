@@ -103,6 +103,37 @@
             .field button:hover{
                 background-color: #016dcb;
             }
+            .button-field2{
+                display: inline-block;
+            }
+            .b1{
+                width: 250px;
+            }
+            .b2{
+                padding-left: 45px;
+            }
+            .button-field2 button{
+                height: 20px;
+                width: 70px;
+                border: none;
+                font-size: 11px;
+                font-weight: 400;
+                border-radius: 6px;
+            }
+            .b2 button{
+                border: none;
+                cursor: pointer;
+                appearance: none;
+                background-color: inherit;
+                vertical-align: middle;
+                color: #fff;
+                background-color: rgb(255, 65, 65);
+                transition: all 0.3s ease;
+                cursor: pointer;
+            }
+            .b2 button:hover{
+                background-color: rgb(244, 62, 62);
+            }
             .form-link{
                 text-align: center;
                 margin-top: 10px;
@@ -128,13 +159,15 @@
             <div class="form login">
                 <div class="form-content">
                     <div class="ici">
-                        <div width="50px">
+                        <div class="button-field2 b1" style="overflow: hidden; text-overflow: ellipsis; max-width: 10;">
                             {{user.username}}
-                            <a href="/logout/" style="margin-left: 220px;">Déconnexion</a>
+                        </div>
+                        <div class="button-field2 b2">
+                            <a href="/logout/"><button>Déconnexion</button></a>
                         </div>
                     </div>
                     <header>Salons</header>
-                    <nav>   
+                    <nav>
                         <div>
                             {% for room in rooms %}
                                 <div class="field button-field">
