@@ -5,96 +5,215 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width">
         <title>{{room.name}}</title>
-
         <style>
-            #msglist {
-                height: 500px;
-                width: auto;
-                word-wrap: break-word;
-                overflow-y: auto;
+            *{
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            @keyframes pan {
+                100% { background-position: 15% 50%;}
+            }
+            body{
+                display: grid;
+                place-items: center;
+                margin: 0;
+                padding: 0 24px;
+                background-image: url({% load static %}{% static "core/imageb.jpeg" %});
+                background-repeat: no-repeat;
+                background-size: cover;
+                animation: pan 6s infinite alternate linear;
+            }
+            .container{
+                height: 100vh;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                /*background-color: #4070f4;*/
+                column-gap: 30px;
+            }
+            @media (width >= 500px){
+                body{
+                    padding: 0;
+                }
+            }
+            .form{
+                position: absolute;
+                max-width: 700px;
+                width: 100%;
+                padding: 10px 30px 0px 30px;
+                border-radius: 6px;
+                background: #FFF;
+            }
+            header{
+                font-size: 28px;
+                font-weight: 600;
+                color: #232836;
+                text-align: center;
+            }
+            form{
+                margin-top: 0px;
+            }
+            .form .field{
+                position: relative;
+                height: 50px;
+                width: 95%;
+                margin-top: 0px;
+                border-radius: 6px;
+            }
+            .field input{
+                outline: none;
+                padding: 0 15px;
+                border: 1px solid#CACACA;
+            }
+            .field input:focus{
+                border-bottom-width: 2px;
+            }
+            .form-link{
+                text-align: center;
+                margin-top: 10px;
+            }
+            .form-link span,
+            .form-link a{
+                font-size: 14px;
+                font-weight: 400;
+                color: #232836;
+            }
+            .form a{
+                color: #ffffff;
+                text-decoration: none;
+            }
+            .form-content a:hover{
+                text-decoration: underline;
+            }
+            .field button{
+                border: none;
+                cursor: pointer;
+                appearance: none;
+                background-color: inherit;
+                vertical-align: middle;
+            }
+            .form-content{
+                
+                height: 93vh;
+                display: flex;
+                flex-direction: column;
+
+            }
+            .header2{
+                text-align: center;
+            }
+            .header3{
+                padding: 10px 10px;
+                background-color: #0171d354;
+                border-radius: 6px;
+                margin-bottom: 10px;
+            }
+            .header3 a{
+                margin-left: 170px;
+            }
+            .textmess{
+                background-color: #cacaca35;
+                border-radius: 6px;
+                padding: 10px;
+                height: 62%;
+            }
+            .sendmess{
+                margin-top: 10px;
+                margin-bottom: 0px;
             }
         </style>
-
     </head>
     <body>
-        <nav>
-            <div>
-                <a href="/rooms/">Salons</a>
-                <a href="/logout/">Déconnexion</a>
-            </div>
-        </nav>
-        <div>
-            <h1>{{room.name}}</h1>
-        </div>
-        <div>
-            <div id="msglist"> <!-- Affiche les messages dans le flux de messages (avec nom d'utilisateur) -->
-                {% for message in message %}<b>{{message.user.username}}</b>: {{message.text}}<br>{% endfor %}
-            </div>
-        </div>
-        <div>
-            <form method="post">
-                <input type="text" name="text" maxlength="2000" placeholder="Envoyer un message" id="chatinput">
-                <button id="chatsubmit">Envoyer</button>
-            </form>
-        </div>
-        
-        {{room.slug|json_script:"roomnamejs"}}
-        {{request.user.username|json_script:"usernamejs"}}
-        
-        <script>
-            const roomName = JSON.parse(document.getElementById('roomnamejs').textContent);
-            const userName = JSON.parse(document.getElementById('usernamejs').textContent);
-            const chatSocket = new WebSocket(
-                'ws://' + window.location.host + '/ws/' + roomName + '/'
-            );
-        
-            chatSocket.onmessage = function(e) {
-                const data = JSON.parse(e.data);
-        
-                //concatène le message à la suite des autres messages affichés
-                if (data.message) { 
-                    document.querySelector('#msglist').innerHTML += ('<b>' + data.username + '</b>: ' + data.message + '<br>');
-                }
-        
-                scrollDown(); //scrolle jusqu'au dernier message
-            };
+        <section class="container forms">
+            <div class="form signup">
+                <div class="form-content">
+                    <div class="header2">
+                        {% load static %} <img src="{% static "core/image.png" %}" alt="logo" height="80px" />
+                    </div>
+                    <div class="header3">
+                        <p>
+                            <strong style="font-size:30px;">{{room.name}}</strong>
+                            <a href="/rooms/" style="color: black;">Salons</a>
+                            <a href="/logout/" style="color: rgb(255, 65, 65);">Déconnexion</a>
+                        </p>
+                    </div>
+                    <div class="textmess">
+                        <div id="msglist"> <!-- Affiche les messages dans le flux de messages (avec nom d'utilisateur) -->
+                            {% for message in message %}<b>{{message.user.username}}</b>: {{message.text}}<br>{% endfor %}
+                        </div>
+                    </div>
+                    <div class="sendmess">
+                        <div class="field input-field">
+                            <form method="post">
+                                <input type="text" name="text" maxlength="2000" placeholder="Envoyer un message" class="field input-field" id="chatinput">
+                                <button id="chatsubmit"><img src="{% static "core/send.png" %}" alt="logo" height="25px" /></button>
+                            </form>
+                        </div>
+                    </div>
 
-            chatSocket.onclose = function(e) {
-                console.log('onclose')
-            }
-        
-            document.querySelector('#chatsubmit').onclick = function(e) {
-                e.preventDefault()
-        
-                const chatInput = document.querySelector('#chatinput');
-                const message = chatInput.value;
-        
-                console.log({
-                    'message': message,
-                    'username': userName,
-                    'room': roomName
-                })
-        
-                chatSocket.send(JSON.stringify({
-                    'message': message,
-                    'username': userName,
-                    'room': roomName
-                }));
-        
-                chatInput.value = '';
-        
-                return false
-            };
-                 
-            //Permet de scroller jusqu'au dernier message affiché, 
-            //pour que les messages les plus récents soient toujours visibles
-            function scrollDown() {
-                let list = document.getElementById("msglist");
-                list.scrollTop = list.scrollHeight;
-            }
-        
-            //Scroll au chargement de la page
-            scrollDown();
-        </script>
+                    {{room.slug|json_script:"roomnamejs"}}
+                    {{request.user.username|json_script:"usernamejs"}}
+                    
+                    <script>
+                        const roomName = JSON.parse(document.getElementById('roomnamejs').textContent);
+                        const userName = JSON.parse(document.getElementById('usernamejs').textContent);
+                        const chatSocket = new WebSocket(
+                            'ws://' + window.location.host + '/ws/' + roomName + '/'
+                        );
+                    
+                        chatSocket.onmessage = function(e) {
+                            const data = JSON.parse(e.data);
+                    
+                            //concatène le message à la suite des autres messages affichés
+                            if (data.message) { 
+                                document.querySelector('#msglist').innerHTML += ('<b>' + data.username + '</b>: ' + data.message + '<br>');
+                            }
+                    
+                            scrollDown(); //scrolle jusqu'au dernier message
+                        };
+            
+                        chatSocket.onclose = function(e) {
+                            console.log('onclose')
+                        }
+                    
+                        document.querySelector('#chatsubmit').onclick = function(e) {
+                            e.preventDefault()
+                    
+                            const chatInput = document.querySelector('#chatinput');
+                            const message = chatInput.value;
+                    
+                            console.log({
+                                'message': message,
+                                'username': userName,
+                                'room': roomName
+                            })
+                    
+                            chatSocket.send(JSON.stringify({
+                                'message': message,
+                                'username': userName,
+                                'room': roomName
+                            }));
+                    
+                            chatInput.value = '';
+                    
+                            return false
+                        };
+                             
+                        //Permet de scroller jusqu'au dernier message affiché, 
+                        //pour que les messages les plus récents soient toujours visibles
+                        function scrollDown() {
+                            let list = document.getElementById("msglist");
+                            list.scrollTop = list.scrollHeight;
+                        }
+                    
+                        //Scroll au chargement de la page
+                        scrollDown();
+                    </script>
+                </div>
+            </div>
+        </section>
     </body>
 </html>
