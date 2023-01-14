@@ -5,39 +5,149 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width">
         <title>S'inscrire | WebChat</title>
+        <style>
+            *{
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            @keyframes pan {
+                100% { background-position: 15% 50%;}
+            }
+            body{
+                display: grid;
+                place-items: center;
+                margin: 0;
+                padding: 0 24px;
+                background-image: url({% load static %}{% static "core/imageb.jpeg" %});
+                background-repeat: no-repeat;
+                background-size: cover;
+                animation: pan 6s infinite alternate linear;
+            }
+            .container{
+                height: 100vh;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                /*background-color: #4070f4;*/
+
+                column-gap: 30px;
+            }
+            @media (width >= 500px){
+                body{
+                    padding: 0;
+                }
+            }
+            .form{
+                position: absolute;
+                max-width: 430px;
+                width: 100%;
+                padding: 30px;
+                border-radius: 6px;
+                background: #FFF;
+            }
+            header{
+                font-size: 28px;
+                font-weight: 600;
+                color: #232836;
+                text-align: center;
+            }
+            form{
+                margin-top: 30px;
+            }
+            .form .field{
+                position: relative;
+                height: 50px;
+                width: 100%;
+                margin-top: 20px;
+                border-radius: 6px;
+            }
+            .field input,
+            .field button{
+                height: 100%;
+                width: 100%;
+                border: none;
+                font-size: 16px;
+                font-weight: 400;
+                border-radius: 6px;
+            }
+            .field input{
+                outline: none;
+                padding: 0 15px;
+                border: 1px solid#CACACA;
+            }
+            .field input:focus{
+                border-bottom-width: 2px;
+            }
+            .field button{
+                color: #fff;
+                background-color: #0171d3;
+                transition: all 0.3s ease;
+                cursor: pointer;
+            }
+            .field button:hover{
+                background-color: #016dcb;
+            }
+            .form-link{
+                text-align: center;
+                margin-top: 10px;
+            }
+            .form-link span,
+            .form-link a{
+                font-size: 14px;
+                font-weight: 400;
+                color: #232836;
+            }
+            .form a{
+                color: #0171d3;
+                text-decoration: none;
+            }
+            .form-content a:hover{
+                text-decoration: underline;
+            }
+        </style>
     </head>
     <body>
-        <form method="post" action="." class="suform">
-            {% csrf_token %}
-            <div>
-                <label>Nom d'utilisateur</label>
-                <input type="text" name="username">
-            </div>
-
-            <div>
-                <label>Mot de passe</label>
-                <input type="password" name="password1">
-            </div>
-
-            <div>
-                <label>Confirmer le mot de passe</label>
-                <input type="password" name="password2">
-            </div>
-             
-            {% if form.errors %}
-                {% for field in form %}
-                    {% for error in field.errors %} 
-                        <div class="mb-5 p-4 rounded-xl bg-red-300 text-white">
-                            <p>{{ error|escape }}</p>
+        <section class="container forms">
+            <div class="form signup">
+                <div class="form-content">
+                    <header>Inscription</header>
+                    <form method="post" action="." class="suform">
+                        {% csrf_token %}
+                        <div class="field input-field">
+                            <input type="text" name="username" placeholder="Identifiant" class="input">
                         </div>
-                    {% endfor %}
-                {% endfor %}
-            {% endif %}
-
-            <input type="submit" value="Submit"/>
-        </form>
+            
+                        <div class="field input-field">
+                            <input type="password" name="password1" placeholder="Mot de passe" class="password">
+                        </div>
+            
+                        <div class="field input-field">
+                            <input type="password" name="password2" placeholder="Confirmer Mot de passe" class="password">
+                        </div>
+                         
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %} 
+                                    <div class="mb-5 p-4 rounded-xl bg-red-300 text-white">
+                                        <p>{{ error|escape }}</p>
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+                        
+                        <div class="field button-field">
+                            <button type="submit" value="Submit">Inscription</button>
+                            <!--<input type="submit" value="Submit"/>-->
+                        </div>
+                    </form>
+                    <div class="form-link">
+                        <span>Vous avez deja un compte? <a href="/login/" class="link login-link">Connexion</a></span>
+                    </div>
+                </div>
+            </div>
+        </section>
     </body>
 </html>
-
-
-
